@@ -1,0 +1,16 @@
+D:\School\Analyse 5\Assignment\LibServer\bin\Debug\net5.0\LibServer.exe
+D:\School\Analyse 5\Assignment\LibServer\bin\Debug\net5.0\LibServer.deps.json
+D:\School\Analyse 5\Assignment\LibServer\bin\Debug\net5.0\LibServer.runtimeconfig.json
+D:\School\Analyse 5\Assignment\LibServer\bin\Debug\net5.0\LibServer.runtimeconfig.dev.json
+D:\School\Analyse 5\Assignment\LibServer\bin\Debug\net5.0\LibServer.dll
+D:\School\Analyse 5\Assignment\LibServer\bin\Debug\net5.0\ref\LibServer.dll
+D:\School\Analyse 5\Assignment\LibServer\bin\Debug\net5.0\LibServer.pdb
+D:\School\Analyse 5\Assignment\LibServer\obj\Debug\net5.0\LibServer.csprojAssemblyReference.cache
+D:\School\Analyse 5\Assignment\LibServer\obj\Debug\net5.0\LibServer.GeneratedMSBuildEditorConfig.editorconfig
+D:\School\Analyse 5\Assignment\LibServer\obj\Debug\net5.0\LibServer.AssemblyInfoInputs.cache
+D:\School\Analyse 5\Assignment\LibServer\obj\Debug\net5.0\LibServer.AssemblyInfo.cs
+D:\School\Analyse 5\Assignment\LibServer\obj\Debug\net5.0\LibServer.csproj.CoreCompileInputs.cache
+D:\School\Analyse 5\Assignment\LibServer\obj\Debug\net5.0\LibServer.dll
+D:\School\Analyse 5\Assignment\LibServer\obj\Debug\net5.0\ref\LibServer.dll
+D:\School\Analyse 5\Assignment\LibServer\obj\Debug\net5.0\LibServer.pdb
+D:\School\Analyse 5\Assignment\LibServer\obj\Debug\net5.0\LibServer.genruntimeconfig.cache
