@@ -45,37 +45,68 @@ namespace LibServer
 
             byte[] buffer = new byte[maxBuffSize];
             byte[] msg = new byte[maxBuffSize];
-            string data = null;
             #endregion
-
+            #region Socket_Client
             IPAddress ipAddress = IPAddress.Parse(this.setting.ServerIPAddress);
             IPEndPoint localEndpoint = new IPEndPoint(ipAddress, this.setting.ServerPortNumber);
-
             Socket sock = new Socket(AddressFamily.InterNetwork,
                 SocketType.Stream, ProtocolType.Tcp);
             sock.Bind(localEndpoint);
             sock.Listen(this.setting.ServerListeningQueue);
-
             //accept socket from Client
             Socket Recsock = sock.Accept();
+            #endregion
+            #region Socket_BookHelper
+            try
+            {
+                if(false){
+                   #region do nothing
+                     //do nothing   
+                    #endregion
+                }
+                IPAddress IPBookHelper = IPAddress.Parse(this.setting.BookHelperIPAddress);
+                IPEndPoint serverEndPoint = new IPEndPoint(IPBookHelper, this.setting.ServerPortNumber);
+                Socket client_book = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                client_book.Connect(serverEndPoint);
+            }
+            catch (SocketException e)
+            {
+                Console.WriteLine("SocketException: {0}", e);
+            }
+            #endregion
+
 
             while (true)
             {
                 int receivingBytes = Recsock.Receive(buffer);
-                data += Encoding.ASCII.GetString(buffer, 0, receivingBytes);
+                string data = Encoding.ASCII.GetString(buffer, 0, receivingBytes);
+                Console.WriteLine("Received: {0}", data);
+                Message message = JsonSerializer.Deserialize<Message>(data);
+                if (message.Type == MessageType.Hello)
+                {
+                    message.Type = MessageType.Welcome;
+                    message.Content = "";
+                    string send = JsonSerializer.Serialize(message);
+                    byte[] sendBytes = Encoding.ASCII.GetBytes(send);
+                    Recsock.Send(sendBytes);
+                    data = null;
+                    data = Encoding.ASCII.GetString(buffer, 0, receivingBytes);
+
+                }
+
                 //TODO: Here something todo what data we got
-                System.Console.WriteLine(data);
-
-
+                // if (data.IndexOf("<EOF>") > -1)
+                // {
+                //     data = data.TrimEnd("<EOF>".ToCharArray());
+                //     System.Console.WriteLine(data);
+                //     data = null;
+                // }
+                // hugo added this to see what we got from client
             }
-            
-
-
-
+        }
+        public Message ReceiveMessage(Message message)
+        {
+            return message;
         }
     }
-
 }
-
-
-

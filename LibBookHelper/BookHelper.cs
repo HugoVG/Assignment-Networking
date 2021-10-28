@@ -5,6 +5,7 @@ using System.Net.Sockets;
 using System.IO;
 using System.Collections.Generic;
 using LibData;
+using System.Text;
 
 namespace BookHelper
 {
@@ -23,15 +24,49 @@ namespace BookHelper
     // Note: Complete the implementation of this class. You can adjust the structure of this class.
     public class SequentialHelper
     {
+        public Setting setting; 
         public SequentialHelper()
         {
             //todo: implement the body. Add extra fields and methods to the class if needed
+            string settings = File.ReadAllText($"./ClientServerConfig.json");
+            setting = JsonSerializer.Deserialize<Setting>(settings);
         }
 
         public void start()
         {
             //todo: implement the body. Add extra fields and methods to the class if needed 
+            #region  Yoinked from https://github.com/afshinamighi/Courses/blob/main/Networking/SimpleCS/Client/Program.cs the sample code who got from school
+            int maxBuffSize = 1000;
 
+            byte[] buffer = new byte[maxBuffSize];
+            byte[] msg = new byte[maxBuffSize];
+            string data = null;
+            #endregion
+
+            IPAddress ipAddress = IPAddress.Parse(setting.ServerIPAddress);
+            IPEndPoint localEndpoint = new IPEndPoint(ipAddress, setting.ServerPortNumber);
+
+            Socket sock = new Socket(AddressFamily.InterNetwork,
+                SocketType.Stream, ProtocolType.Tcp);
+            sock.Bind(localEndpoint);
+            sock.Listen(setting.ServerListeningQueue);
+
+            //accept socket from Server
+            Socket Recsock = sock.Accept();
+
+            while (true)
+            {
+                int receivingBytes = Recsock.Receive(buffer);
+                data += Encoding.ASCII.GetString(buffer, 0, receivingBytes);
+                //TODO: Here something todo what data we got
+                if (data.IndexOf("<EOF>") > -1)
+                {
+                    data = data.TrimEnd("<EOF>".ToCharArray());
+                    System.Console.WriteLine(data);
+                    data = null;
+                }
+            }
+            
         }
     }
 }
