@@ -1,0 +1,6 @@
+D:\School\Analyse 5\Assignment\Compose\obj\Debug\net5.0\Compose.GlobalUsings.g.cs
+D:\School\Analyse 5\Assignment\Compose\obj\Debug\net5.0\Compose.csproj.AssemblyReference.cache
+D:\School\Analyse 5\Assignment\Compose\obj\Debug\net5.0\Compose.GeneratedMSBuildEditorConfig.editorconfig
+D:\School\Analyse 5\Assignment\Compose\obj\Debug\net5.0\Compose.AssemblyInfoInputs.cache
+D:\School\Analyse 5\Assignment\Compose\obj\Debug\net5.0\Compose.AssemblyInfo.cs
+D:\School\Analyse 5\Assignment\Compose\obj\Debug\net5.0\Compose.csproj.CoreCompileInputs.cache

@@ -1,0 +1,16 @@
+D:\School\Analyse 5\Assignment\Compose\bin\Debug\net6.0\Compose.exe
+D:\School\Analyse 5\Assignment\Compose\bin\Debug\net6.0\Compose.deps.json
+D:\School\Analyse 5\Assignment\Compose\bin\Debug\net6.0\Compose.runtimeconfig.json
+D:\School\Analyse 5\Assignment\Compose\bin\Debug\net6.0\Compose.dll
+D:\School\Analyse 5\Assignment\Compose\bin\Debug\net6.0\ref\Compose.dll
+D:\School\Analyse 5\Assignment\Compose\bin\Debug\net6.0\Compose.pdb
+D:\School\Analyse 5\Assignment\Compose\obj\Debug\net6.0\Compose.GlobalUsings.g.cs
+D:\School\Analyse 5\Assignment\Compose\obj\Debug\net6.0\Compose.csproj.AssemblyReference.cache
+D:\School\Analyse 5\Assignment\Compose\obj\Debug\net6.0\Compose.GeneratedMSBuildEditorConfig.editorconfig
+D:\School\Analyse 5\Assignment\Compose\obj\Debug\net6.0\Compose.AssemblyInfoInputs.cache
+D:\School\Analyse 5\Assignment\Compose\obj\Debug\net6.0\Compose.AssemblyInfo.cs
+D:\School\Analyse 5\Assignment\Compose\obj\Debug\net6.0\Compose.csproj.CoreCompileInputs.cache
+D:\School\Analyse 5\Assignment\Compose\obj\Debug\net6.0\Compose.dll
+D:\School\Analyse 5\Assignment\Compose\obj\Debug\net6.0\ref\Compose.dll
+D:\School\Analyse 5\Assignment\Compose\obj\Debug\net6.0\Compose.pdb
+D:\School\Analyse 5\Assignment\Compose\obj\Debug\net6.0\Compose.genruntimeconfig.cache

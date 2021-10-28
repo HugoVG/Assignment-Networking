@@ -33,6 +33,7 @@ namespace LibServer
             setting = JsonSerializer.Deserialize<Setting>(settings);
         }
 
+
         public void start()
         {
             //todo: implement the body. Add extra fields and methods to the class if it is needed
@@ -62,11 +63,12 @@ namespace LibServer
             {
                 int receivingBytes = Recsock.Receive(buffer);
                 data += Encoding.ASCII.GetString(buffer, 0, receivingBytes);
-
-                //Here Determen what data we got
+                //TODO: Here something todo what data we got
+                System.Console.WriteLine(data);
 
 
             }
+            
 
 
 

@@ -5,7 +5,6 @@ D:\School\Analyse 5\Assignment\LibClient\bin\Debug\net5.0\LibClient.runtimeconfi
 D:\School\Analyse 5\Assignment\LibClient\bin\Debug\net5.0\LibClient.dll
 D:\School\Analyse 5\Assignment\LibClient\bin\Debug\net5.0\ref\LibClient.dll
 D:\School\Analyse 5\Assignment\LibClient\bin\Debug\net5.0\LibClient.pdb
-D:\School\Analyse 5\Assignment\LibClient\obj\Debug\net5.0\LibClient.csprojAssemblyReference.cache
 D:\School\Analyse 5\Assignment\LibClient\obj\Debug\net5.0\LibClient.GeneratedMSBuildEditorConfig.editorconfig
 D:\School\Analyse 5\Assignment\LibClient\obj\Debug\net5.0\LibClient.AssemblyInfoInputs.cache
 D:\School\Analyse 5\Assignment\LibClient\obj\Debug\net5.0\LibClient.AssemblyInfo.cs
@@ -14,3 +13,4 @@ D:\School\Analyse 5\Assignment\LibClient\obj\Debug\net5.0\LibClient.dll
 D:\School\Analyse 5\Assignment\LibClient\obj\Debug\net5.0\ref\LibClient.dll
 D:\School\Analyse 5\Assignment\LibClient\obj\Debug\net5.0\LibClient.pdb
 D:\School\Analyse 5\Assignment\LibClient\obj\Debug\net5.0\LibClient.genruntimeconfig.cache
+D:\School\Analyse 5\Assignment\LibClient\obj\Debug\net5.0\LibClient.csproj.AssemblyReference.cache

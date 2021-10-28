@@ -84,6 +84,13 @@ namespace LibClient
             // todo: implement the body to communicate with the server and requests the book. Return the result as an Output object.
             // Adding extra methods to the class is permitted. The signature of this method must not change.
 
+            // Create a TCP/IP client socket.
+            //clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            BookData[] bookData = JsonSerializer.Deserialize<BookData[]>(File.ReadAllText("./LibInput.json"));
+            foreach (BookData book in bookData){
+                System.Console.WriteLine(book.Title);
+            }
+            
             return result;
         }
 
