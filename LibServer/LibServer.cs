@@ -25,7 +25,10 @@ namespace LibServer
     // Note: Complete the implementation of this class. You can adjust the structure of this class.
     public class SequentialServer
     {
+        public Socket client_book;
+        public Socket sock;
         public Setting setting;
+        public Socket Recsock;
         public SequentialServer()
         {
             //todo: implement the body. Add extra fields and methods to the class if it is needed
@@ -49,12 +52,12 @@ namespace LibServer
             #region Socket_Client
             IPAddress ipAddress = IPAddress.Parse(this.setting.ServerIPAddress);
             IPEndPoint localEndpoint = new IPEndPoint(ipAddress, this.setting.ServerPortNumber);
-            Socket sock = new Socket(AddressFamily.InterNetwork,
+            sock = new Socket(AddressFamily.InterNetwork,
                 SocketType.Stream, ProtocolType.Tcp);
             sock.Bind(localEndpoint);
             sock.Listen(this.setting.ServerListeningQueue);
             //accept socket from Client
-            Socket Recsock = sock.Accept();
+            Recsock = sock.Accept();
             #endregion
             #region Socket_BookHelper
             try
@@ -65,9 +68,10 @@ namespace LibServer
                     #endregion
                 }
                 IPAddress IPBookHelper = IPAddress.Parse(this.setting.BookHelperIPAddress);
-                IPEndPoint serverEndPoint = new IPEndPoint(IPBookHelper, this.setting.ServerPortNumber);
-                Socket client_book = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                client_book.Connect(serverEndPoint);
+                IPEndPoint BookserverEndPoint = new IPEndPoint(IPBookHelper, this.setting.BookHelperPortNumber);
+                client_book = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                client_book.Connect(BookserverEndPoint);
+                System.Console.WriteLine("Connected to BookHelper"); 
             }
             catch (SocketException e)
             {
@@ -78,21 +82,54 @@ namespace LibServer
 
             while (true)
             {
+                System.Console.WriteLine("Starting Receiving Data from Client");
+                
                 int receivingBytes = Recsock.Receive(buffer);
                 string data = Encoding.ASCII.GetString(buffer, 0, receivingBytes);
-                Console.WriteLine("Received: {0}", data);
+                System.Console.WriteLine(data + " DEBUG 89");
+                Console.WriteLine("Received: {0} 90", data);
                 Message message = JsonSerializer.Deserialize<Message>(data);
-                if (message.Type == MessageType.Hello)
+                switch (message.Type)
                 {
-                    message.Type = MessageType.Welcome;
-                    message.Content = "";
-                    string send = JsonSerializer.Serialize(message);
-                    byte[] sendBytes = Encoding.ASCII.GetBytes(send);
-                    Recsock.Send(sendBytes);
-                    data = null;
-                    data = Encoding.ASCII.GetString(buffer, 0, receivingBytes);
+                    case MessageType.Hello:
+                        {
+                            message.Type = MessageType.Welcome;
+                            message.Content = "";
+                            string send = JsonSerializer.Serialize(message);
+                            byte[] sendBytes = Encoding.ASCII.GetBytes(send);
+                            Recsock.Send(sendBytes);                                 
+                            break;
+                        }
+                    case MessageType.BookInquiry:
+                        {
+                            string send = JsonSerializer.Serialize(message);
+                            byte[] sendBytes = Encoding.ASCII.GetBytes(send);
+                            client_book.Send(sendBytes);
+                            int receivingBookBytes = client_book.Receive(buffer);
 
+                            string data_book = Encoding.ASCII.GetString(buffer, 0, receivingBookBytes);
+                            Console.WriteLine("Received: {0} 110", data_book);
+                            Message message_book = JsonSerializer.Deserialize<Message>(data_book);
+                            if (message_book.Type == MessageType.BookInquiryReply){
+                                send = JsonSerializer.Serialize(message_book);
+                                sendBytes = Encoding.ASCII.GetBytes(send);
+                                Recsock.Send(sendBytes);                                
+                            }
+                            else if (message_book.Type == MessageType.NotFound){
+                                //PepeSadge
+                            }
+                            break;
+                        }
+                    case MessageType.BookInquiryReply:
+                        {
+                            break;
+                        }
+                    default:
+                        {
+                            break;
+                        }
                 }
+
 
                 //TODO: Here something todo what data we got
                 // if (data.IndexOf("<EOF>") > -1)

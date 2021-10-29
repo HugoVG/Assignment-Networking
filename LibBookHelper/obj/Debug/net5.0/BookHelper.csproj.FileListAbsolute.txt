@@ -5,7 +5,6 @@ D:\School\Analyse 5\Assignment\LibBookHelper\bin\Debug\net5.0\BookHelper.runtime
 D:\School\Analyse 5\Assignment\LibBookHelper\bin\Debug\net5.0\BookHelper.dll
 D:\School\Analyse 5\Assignment\LibBookHelper\bin\Debug\net5.0\ref\BookHelper.dll
 D:\School\Analyse 5\Assignment\LibBookHelper\bin\Debug\net5.0\BookHelper.pdb
-D:\School\Analyse 5\Assignment\LibBookHelper\obj\Debug\net5.0\BookHelper.csprojAssemblyReference.cache
 D:\School\Analyse 5\Assignment\LibBookHelper\obj\Debug\net5.0\BookHelper.GeneratedMSBuildEditorConfig.editorconfig
 D:\School\Analyse 5\Assignment\LibBookHelper\obj\Debug\net5.0\BookHelper.AssemblyInfoInputs.cache
 D:\School\Analyse 5\Assignment\LibBookHelper\obj\Debug\net5.0\BookHelper.AssemblyInfo.cs
@@ -14,3 +13,4 @@ D:\School\Analyse 5\Assignment\LibBookHelper\obj\Debug\net5.0\BookHelper.dll
 D:\School\Analyse 5\Assignment\LibBookHelper\obj\Debug\net5.0\ref\BookHelper.dll
 D:\School\Analyse 5\Assignment\LibBookHelper\obj\Debug\net5.0\BookHelper.pdb
 D:\School\Analyse 5\Assignment\LibBookHelper\obj\Debug\net5.0\BookHelper.genruntimeconfig.cache
+D:\School\Analyse 5\Assignment\LibBookHelper\obj\Debug\net5.0\BookHelper.csproj.AssemblyReference.cache
