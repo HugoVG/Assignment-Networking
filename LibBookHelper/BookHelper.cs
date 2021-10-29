@@ -58,6 +58,16 @@ namespace BookHelper
             {
                 int receivingBytes = Recsock.Receive(buffer);
                 data += Encoding.ASCII.GetString(buffer, 0, receivingBytes);
+                Console.WriteLine("Received: {0}", data);
+                Message message = JsonSerializer.Deserialize<Message>(data);                
+                Message newMessage = FindMessage(message);
+
+                if (newMessage.MessageType is BookInquiryReply)
+                {
+
+                    // Now I send data back. Ik denk alleen niet dat ik dat goed doe, dus laat ik dit ff open :)
+                }
+
                 //TODO: Here something todo what data we got
                 if (data.IndexOf("<EOF>") > -1)
                 {
@@ -66,7 +76,22 @@ namespace BookHelper
                     data = null;
                 }
             }
-            
+        }
+
+        public Message FindMessage(Message message)
+        {
+            string jsonText = File.ReadAllText(@"../Books.json");
+            BookData books = JsonConvert.DeserializeObject<List<BookData>>(jsonText);
+            Message newMessage = new Message(); 
+            foreach (Bookdata book in books)
+            {
+                if (message.content == book.Title)
+                {
+                    newMessage.content = book.Title;
+                    newMessage.Type = MessageType.BookInquiryReply;
+                }
+            }
+            return newMessage;
         }
     }
 }
