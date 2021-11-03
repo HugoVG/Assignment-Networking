@@ -37,11 +37,7 @@ namespace BookHelper
         {
             //todo: implement the body. Add extra fields and methods to the class if needed 
             #region  Yoinked from https://github.com/afshinamighi/Courses/blob/main/Networking/SimpleCS/Client/Program.cs the sample code who got from school
-            int maxBuffSize = 1000;
 
-            byte[] buffer = new byte[maxBuffSize];
-            byte[] msg = new byte[maxBuffSize];
-            string data = null;
             #endregion
 
             IPAddress ipAddress = IPAddress.Parse(setting.BookHelperIPAddress); //changed IP and Port
@@ -57,26 +53,18 @@ namespace BookHelper
 
             while (true)
             {
+                int maxBuffSize = 1000;
+
+                byte[] buffer = new byte[maxBuffSize];
+                byte[] msg = new byte[maxBuffSize];
+                string data = null;
+                System.Console.WriteLine("Ready to accept");
                 int receivingBytes = Recsock.Receive(buffer);
                 data += Encoding.ASCII.GetString(buffer, 0, receivingBytes);
                 Console.WriteLine("Received: {0}", data);
                 Message message = JsonSerializer.Deserialize<Message>(data);
                 //we krijgen sws nooit een message dat NIET bookInquiry is
                 Recsock.Send(Encoding.ASCII.GetBytes(JsonSerializer.Serialize(FindMessage(message))));
-                //GET ONELINED
-                /*
-                if (newMessage.Type is MessageType.BookInquiryReply) // 29/10/2021 -> je had verkeerde Class gepakt vandaar erroe
-                {                    
-                    // Now I send data back. Ik denk alleen niet dat ik dat goed doe, dus laat ik dit ff open :)
-                }
-                */
-                //TODO: Here something todo what data we got
-                if (data.IndexOf("<EOF>") > -1)
-                {
-                    data = data.TrimEnd("<EOF>".ToCharArray());
-                    System.Console.WriteLine(data);
-                    data = null;
-                }
             }
         }
 
@@ -99,18 +87,6 @@ namespace BookHelper
                     newMessage.Content = "";
             }
             return newMessage;
-            
-
-            /*
-            foreach (BookData book in books) //Bookdata veranderd naar BookData
-            {
-                if (message.Content == book.Title) // message.content verander naar message.Content
-                {
-                    newMessage.Content = book.Title;
-                    newMessage.Type = MessageType.BookInquiryReply;
-                }
-            }
-            */
         }
     }
 }

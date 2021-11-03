@@ -41,7 +41,7 @@ namespace LibClient
         public string client_id;
         private string bookName;
         // all the required settings are provided in this file
-        public string configFile = @"../ClientServerConfig.json";
+        public string configFile = @"./ClientServerConfig.json";
         //public string configFile = @"../../../../ClientServerConfig.json"; // for debugging
 
         // todo: add extra fields here in case needed
@@ -54,9 +54,10 @@ namespace LibClient
         /// <param name="bookName">name of the book to be requested from the server, provided by the simulator</param>
         public SimpleClient(int id, string bookName)
         {
+            System.Console.WriteLine("Test");
             //todo: extend the body if needed.
             this.bookName = bookName;
-            this.client_id = "user-" + id.ToString();
+            this.client_id = "client-" + id.ToString();
             this.result = new Output();
             result.BookName = bookName;
             result.Client_id = this.client_id;
@@ -65,9 +66,7 @@ namespace LibClient
             this.settings = JsonSerializer.Deserialize<Setting>(configContent);
             this.ipAddress = IPAddress.Parse(settings.ServerIPAddress);
             this.serverEndPoint = new IPEndPoint(ipAddress, settings.ServerPortNumber);
-            this.clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            clientSocket.Connect(serverEndPoint);
-            
+            this.clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);          
         }
         public Message sendMessage(Message messageARG)
         {
@@ -96,7 +95,7 @@ namespace LibClient
             message = new Message();
             message.Type = MessageType.Hello;
             message.Content = client_id;
-            
+            clientSocket.Connect(serverEndPoint);  
             Message responseMessage = sendMessage(message);
             if (responseMessage.Type == MessageType.Welcome)
             {
@@ -105,7 +104,7 @@ namespace LibClient
                 responseMessage = sendMessage(message);
                 if (responseMessage.Type == MessageType.BookInquiryReply)
                 {
-                    System.Console.WriteLine(responseMessage.Content); //DEBUG RECEIVE
+                    System.Console.WriteLine(responseMessage.Content + " 106"); //DEBUG RECEIVE
                     BookData book = JsonSerializer.Deserialize<BookData>(responseMessage.Content);
                     result.Client_id = client_id;
                     result.BookName = book.Title;
@@ -133,6 +132,7 @@ namespace LibClient
             }
             //DEBUG
             System.Console.WriteLine(JsonSerializer.Serialize(result));
+            clientSocket.Disconnect(false);        
             return result;
         }
     }

@@ -48,8 +48,8 @@ namespace UserHelper
             string data = null;
             #endregion
 
-            IPAddress ipAddress = IPAddress.Parse(setting.ServerIPAddress);
-            IPEndPoint localEndpoint = new IPEndPoint(ipAddress, setting.ServerPortNumber);
+            IPAddress ipAddress = IPAddress.Parse(setting.UserHelperIPAddress);
+            IPEndPoint localEndpoint = new IPEndPoint(ipAddress, setting.UserHelperPortNumber);
 
             Socket sock = new Socket(AddressFamily.InterNetwork,
                 SocketType.Stream, ProtocolType.Tcp);
@@ -61,6 +61,7 @@ namespace UserHelper
 
             while (true)
             {
+                System.Console.WriteLine("Ready to accept");
                 int receivingBytes = Recsock.Receive(buffer);
                 data += Encoding.ASCII.GetString(buffer, 0, receivingBytes);
                 Console.WriteLine("Received: {0}", data);
@@ -69,12 +70,6 @@ namespace UserHelper
                 // Thanks for the one-line. i hate to admit it mr dit maakt mijn level zeer simpel 
                 
                 //TODO: Here something todo what data we got
-                if (data.IndexOf("<EOF>") > -1)
-                {
-                    data = data.TrimEnd("<EOF>".ToCharArray());
-                    System.Console.WriteLine(data);
-                    data = null;
-                }
             }
         }
 
@@ -86,7 +81,16 @@ namespace UserHelper
             newMessage.Type = MessageType.UserInquiryReply;
 
             System.Console.WriteLine(message.Content + " DEBUGING USERHELPER...");
-            UserData user = users.Single(x => x.User_id == message.Content);
+            UserData user;
+            try{
+                 user = users.Single(x => x.User_id == message.Content);
+            }
+            catch (Exception e)
+            {
+                newMessage.Type = MessageType.NotFound;
+                newMessage.Content = "User not found";
+                return newMessage;
+            }
             System.Console.WriteLine(user.Name + " Debug");
             newMessage.Content = JsonSerializer.Serialize(user);
             System.Console.WriteLine(newMessage.Content);                
