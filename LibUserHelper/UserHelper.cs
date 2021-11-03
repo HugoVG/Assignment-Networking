@@ -26,12 +26,12 @@ namespace UserHelper
     // Note: Complete the implementation of this class. You can adjust the structure of this class.
     public class SequentialHelper
     {
-        private static Setting setting;
+        private Setting setting; // geen static zetten 
         public SequentialHelper()
         {
-            string settings = JsonSerializer.Deserialize<Setting>(File.ReadAllText("./ClientServerConfig.json"));
+            string settings = (File.ReadAllText("./ClientServerConfig.json"));
             this.setting = JsonSerializer.Deserialize<Setting>(settings);
-            //todo: implement the body. Add extra fields and methods to the class if needed
+
         }
 
         public void start()

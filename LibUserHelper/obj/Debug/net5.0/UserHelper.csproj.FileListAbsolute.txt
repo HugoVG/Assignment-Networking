@@ -1,0 +1,16 @@
+D:\School\Analyse 5\Assignment\LibUserHelper\obj\Debug\net5.0\UserHelper.csproj.AssemblyReference.cache
+D:\School\Analyse 5\Assignment\LibUserHelper\obj\Debug\net5.0\UserHelper.GeneratedMSBuildEditorConfig.editorconfig
+D:\School\Analyse 5\Assignment\LibUserHelper\obj\Debug\net5.0\UserHelper.AssemblyInfoInputs.cache
+D:\School\Analyse 5\Assignment\LibUserHelper\obj\Debug\net5.0\UserHelper.AssemblyInfo.cs
+D:\School\Analyse 5\Assignment\LibUserHelper\obj\Debug\net5.0\UserHelper.csproj.CoreCompileInputs.cache
+D:\School\Analyse 5\Assignment\LibUserHelper\bin\Debug\net5.0\UserHelper.exe
+D:\School\Analyse 5\Assignment\LibUserHelper\bin\Debug\net5.0\UserHelper.deps.json
+D:\School\Analyse 5\Assignment\LibUserHelper\bin\Debug\net5.0\UserHelper.runtimeconfig.json
+D:\School\Analyse 5\Assignment\LibUserHelper\bin\Debug\net5.0\UserHelper.runtimeconfig.dev.json
+D:\School\Analyse 5\Assignment\LibUserHelper\bin\Debug\net5.0\UserHelper.dll
+D:\School\Analyse 5\Assignment\LibUserHelper\bin\Debug\net5.0\ref\UserHelper.dll
+D:\School\Analyse 5\Assignment\LibUserHelper\bin\Debug\net5.0\UserHelper.pdb
+D:\School\Analyse 5\Assignment\LibUserHelper\obj\Debug\net5.0\UserHelper.dll
+D:\School\Analyse 5\Assignment\LibUserHelper\obj\Debug\net5.0\ref\UserHelper.dll
+D:\School\Analyse 5\Assignment\LibUserHelper\obj\Debug\net5.0\UserHelper.pdb
+D:\School\Analyse 5\Assignment\LibUserHelper\obj\Debug\net5.0\UserHelper.genruntimeconfig.cache

@@ -50,8 +50,8 @@ namespace LibServer
             byte[] msg = new byte[maxBuffSize];
             #endregion
             #region Socket_Client
-            IPAddress ipAddress = IPAddress.Parse(this.setting.ServerIPAddress);
-            IPEndPoint localEndpoint = new IPEndPoint(ipAddress, this.setting.ServerPortNumber);
+            IPAddress ipAddress = IPAddress.Parse(this.setting.UserHelperIPAddress);
+            IPEndPoint localEndpoint = new IPEndPoint(ipAddress, this.setting.UserHelperPortNumber);
             sock = new Socket(AddressFamily.InterNetwork,
                 SocketType.Stream, ProtocolType.Tcp);
             sock.Bind(localEndpoint);
