@@ -5,6 +5,7 @@ using System.Net.Sockets;
 using System.IO;
 using System.Collections.Generic;
 using LibData;
+using System.Linq; 
 using System.Text;
 
 namespace UserHelper
@@ -28,7 +29,8 @@ namespace UserHelper
         private static Setting setting;
         public SequentialHelper()
         {
-            setting = JsonSerializer.Deserialize<Setting>(File.ReadAllText("setting.json"));
+            string settings = JsonSerializer.Deserialize<Setting>(File.ReadAllText("./ClientServerConfig.json"));
+            this.setting = JsonSerializer.Deserialize<Setting>(settings);
             //todo: implement the body. Add extra fields and methods to the class if needed
         }
 
@@ -61,6 +63,11 @@ namespace UserHelper
             {
                 int receivingBytes = Recsock.Receive(buffer);
                 data += Encoding.ASCII.GetString(buffer, 0, receivingBytes);
+                Console.WriteLine("Received: {0}", data);
+                Message message = JsonSerializer.Deserialize<Message>(data);
+                Recsock.Send(Encoding.ASCII.GetBytes(JsonSerializer.Serialize(ExtractInfo(message))));
+                // Thanks for the one-line. i hate to admit it mr dit maakt mijn level zeer simpel 
+                
                 //TODO: Here something todo what data we got
                 if (data.IndexOf("<EOF>") > -1)
                 {
@@ -69,6 +76,23 @@ namespace UserHelper
                     data = null;
                 }
             }
+        }
+
+        public Message ExtractInfo(Message message)
+        {
+            string userInfo = File.ReadAllText(@"./Users.json");
+            UserData[] users = JsonSerializer.Deserialize<UserData[]>(userInfo);
+            Message newMessage = new Message();
+            newMessage.Type = MessageType.UserInquiryReply;
+
+            System.Console.WriteLine(message.Content + " DEBUGING USERHELPER...");
+            UserData user = users.Single(x => x.User_id == message.Content);
+            System.Console.WriteLine(user.Name + " Debug");
+            newMessage.Content = JsonSerializer.Serialize(user);
+            System.Console.WriteLine(newMessage.Content);                
+            return newMessage;
+
+            // ik heb hier geen try catch gedaan want volgens de stappen heb je geen situatie waar er een boek/ user niet gevonden is
         }
     }
 }
