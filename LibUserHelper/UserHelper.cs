@@ -59,17 +59,25 @@ namespace UserHelper
             //accept socket from Client
             Socket Recsock = sock.Accept();
 
-            while (true)
+            try{
+                while (Recsock.Connected)
+                {
+                    System.Console.WriteLine("Ready to accept");
+                    int receivingBytes = Recsock.Receive(buffer);
+                    data += Encoding.ASCII.GetString(buffer, 0, receivingBytes);
+                    Console.WriteLine("Received: {0}", data);
+
+                    Message message = JsonSerializer.Deserialize<Message>(data);
+                    Recsock.Send(Encoding.ASCII.GetBytes(JsonSerializer.Serialize(ExtractInfo(message))));
+                    // Thanks for the one-line. i hate to admit it mr dit maakt mijn level zeer simpel 
+                    
+                    //TODO: Here something todo what data we got
+                }
+            }
+            catch (System.Net.Sockets.SocketException e)
             {
-                System.Console.WriteLine("Ready to accept");
-                int receivingBytes = Recsock.Receive(buffer);
-                data += Encoding.ASCII.GetString(buffer, 0, receivingBytes);
-                Console.WriteLine("Received: {0}", data);
-                Message message = JsonSerializer.Deserialize<Message>(data);
-                Recsock.Send(Encoding.ASCII.GetBytes(JsonSerializer.Serialize(ExtractInfo(message))));
-                // Thanks for the one-line. i hate to admit it mr dit maakt mijn level zeer simpel 
-                
-                //TODO: Here something todo what data we got
+                e.ToString();
+                //kinda wrong but also very right
             }
         }
 
@@ -87,6 +95,7 @@ namespace UserHelper
             }
             catch (Exception e)
             {
+                e.ToString(); // no errors ;)
                 newMessage.Type = MessageType.NotFound;
                 newMessage.Content = "User not found";
                 return newMessage;

@@ -51,10 +51,9 @@ namespace BookHelper
             //accept socket from Server
             Socket Recsock = sock.Accept();
 
-            while (true)
+            while (Recsock.Connected)
             {
                 int maxBuffSize = 1000;
-
                 byte[] buffer = new byte[maxBuffSize];
                 byte[] msg = new byte[maxBuffSize];
                 string data = null;
@@ -62,9 +61,20 @@ namespace BookHelper
                 int receivingBytes = Recsock.Receive(buffer);
                 data += Encoding.ASCII.GetString(buffer, 0, receivingBytes);
                 Console.WriteLine("Received: {0}", data);
-                Message message = JsonSerializer.Deserialize<Message>(data);
+                if (data == "")
+                {
+                    
+                }
+                try{
+                    Message message = JsonSerializer.Deserialize<Message>(data);
+                    Recsock.Send(Encoding.ASCII.GetBytes(JsonSerializer.Serialize(FindMessage(message))));
+                }
+                catch(System.Text.Json.JsonException e)
+                {
+                    e = new System.Text.Json.JsonException("Invalid JSON");
+                    break;                   
+                }
                 //we krijgen sws nooit een message dat NIET bookInquiry is
-                Recsock.Send(Encoding.ASCII.GetBytes(JsonSerializer.Serialize(FindMessage(message))));
             }
         }
 

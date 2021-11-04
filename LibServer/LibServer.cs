@@ -30,6 +30,8 @@ namespace LibServer
         public Socket sock;
         public Setting setting;
         public Socket Recsock;
+        public bool running = true;
+        public bool running_INNER = true;
         public SequentialServer()
         {
             //todo: implement the body. Add extra fields and methods to the class if it is needed
@@ -95,7 +97,7 @@ namespace LibServer
                 Console.WriteLine("SocketException: {0}", e);
             }
             #endregion
-            while (true)
+            while (running)
             {
                 #region UNSAFE
 
@@ -103,7 +105,7 @@ begin:
                 #endregion
                 Recsock = sock.Accept();
                 System.Console.WriteLine(Recsock.Connected);                
-                while (Recsock.Connected == true)
+                while (running_INNER)
                 {
                     #region connect
                     System.Console.WriteLine("Ready to accept");
@@ -115,15 +117,40 @@ begin:
                     System.Console.WriteLine(data + " DEBUG 89");
                     Console.WriteLine("Received: {0} 90", data);
                     #endregion
+
+                    System.Console.WriteLine(data + " DEBUG 119");
                     if (data == "")
-                    {
-                        goto begin; //YES
+                     {
+                        goto begin;
                     }
                     Message message = JsonSerializer.Deserialize<Message>(data);
+                    
+                    
                     switch (message.Type)
                     {
                         case MessageType.Hello:
                             {
+                                System.Console.WriteLine(message.Content);
+                                if (message.Content == "client--1"){
+                                    try{
+                                        client_User.Shutdown(SocketShutdown.Both);
+                                        System.Console.WriteLine("Client User Shutdown");
+                                    }
+                                    finally{
+                                        client_User.Close();
+                                        System.Console.WriteLine("Client User Closed");
+                                    }
+                                    try{
+                                        client_book.Shutdown(SocketShutdown.Both);
+                                        System.Console.WriteLine("Client Book Shutdown");
+                                    }
+                                    finally{
+                                        client_book.Close();
+                                        System.Console.WriteLine("Client Book Closed");                                        
+                                    }
+                                    running = false;
+                                    running_INNER = false;
+                                }
                                 message.Type = MessageType.Welcome;
                                 message.Content = "";
                                 string send = JsonSerializer.Serialize(message);
