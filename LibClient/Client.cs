@@ -4,6 +4,7 @@ using System.Net;
 using System.Text.Json;
 using LibData;
 using System.Text;
+using System;
 
 namespace LibClient
 {
@@ -41,7 +42,7 @@ namespace LibClient
         public string client_id;
         private string bookName;
         // all the required settings are provided in this file
-        public string configFile = @"./ClientServerConfig.json";
+        public string configFile = @"../ClientServerConfig.json";
         //public string configFile = @"../../../../ClientServerConfig.json"; // for debugging
 
         // todo: add extra fields here in case needed
@@ -54,7 +55,6 @@ namespace LibClient
         /// <param name="bookName">name of the book to be requested from the server, provided by the simulator</param>
         public SimpleClient(int id, string bookName)
         {
-            System.Console.WriteLine("Test");
             //todo: extend the body if needed.
             this.bookName = bookName;
             this.client_id = "client-" + id.ToString();
@@ -71,11 +71,9 @@ namespace LibClient
         public Message sendMessage(Message messageARG)
         {
             string json = JsonSerializer.Serialize(messageARG);
-            System.Console.WriteLine(json); //DEBUG SEND
             byte[] data = Encoding.ASCII.GetBytes(json);
             this.clientSocket.Send(data);
-            int recv = this.clientSocket.Receive(buffer);
-            System.Console.WriteLine(recv); //DEBUG RECEIVE
+            int recv = this.clientSocket.Receive(buffer);            
             string response = Encoding.ASCII.GetString(buffer, 0, recv);
             Message responseMessage = JsonSerializer.Deserialize<Message>(response);
             return responseMessage;
@@ -93,10 +91,38 @@ namespace LibClient
             // Adding extra methods to the class is permitted. The signature of this method must not change.
             buffer = new byte[1024];
             message = new Message();
+            if (client_id == "client--1"){
+                try{
+                    message.Type = MessageType.Hello;
+                    message.Content = client_id;
+                    clientSocket.Connect(serverEndPoint);  
+                    Message resp = sendMessage(message);
+                    message.Type = MessageType.EndCommunication;
+                    message.Content = "";
+                    sendMessage(message);
+                    this.clientSocket.Close();                    
+                }
+                catch (Exception e){
+                    e.ToString();
+                }
+                return null;
+            }
             message.Type = MessageType.Hello;
             message.Content = client_id;
             clientSocket.Connect(serverEndPoint);  
             Message responseMessage = sendMessage(message);
+            //System.Console.WriteLine(responseMessage.Type + " Debug 101"); //DEBUG
+            if (client_id == "client--1"){
+                try{
+                    message.Type = MessageType.EndCommunication;
+                    message.Content = "";
+                    sendMessage(message);
+                    this.clientSocket.Close();                    
+                }
+                catch (Exception e){
+                    e.ToString();
+                }
+            }
             if (responseMessage.Type == MessageType.Welcome)
             {
                 message.Type = MessageType.BookInquiry;
@@ -104,12 +130,12 @@ namespace LibClient
                 responseMessage = sendMessage(message);
                 if (responseMessage.Type == MessageType.BookInquiryReply)
                 {
-                    System.Console.WriteLine(responseMessage.Content + " 106"); //DEBUG RECEIVE
+                    //System.Console.WriteLine(responseMessage.Content + " 106"); //DEBUG RECEIVE
                     BookData book = JsonSerializer.Deserialize<BookData>(responseMessage.Content);
                     result.Client_id = client_id;
                     result.BookName = book.Title;
                     result.Status = book.Status;
-                    System.Console.WriteLine(book.Status); //DEBUG RECEIVE);                    
+                    //System.Console.WriteLine(book.Status); //DEBUG RECEIVE);                    
                     if (book.Status == "Borrowed")
                     {
                         message.Type = MessageType.UserInquiry;
@@ -117,10 +143,16 @@ namespace LibClient
                         responseMessage = sendMessage(message);
                         if (responseMessage.Type == MessageType.UserInquiryReply)
                         {
-                            System.Console.WriteLine(responseMessage.Content); //DEBUG RECEIVE
+                            //System.Console.WriteLine(responseMessage.Content); //DEBUG RECEIVE
                             UserData user = JsonSerializer.Deserialize<UserData>(responseMessage.Content);
                             result.BorrowerName = user.Name;
                             result.BorrowerEmail = user.Email;
+                        }
+                        else if (responseMessage.Type == MessageType.Error)
+                        {
+                            result.Status = "Error";
+                            result.BorrowerName = "";
+                            result.BorrowerEmail = "";
                         }
                     }
                     else
@@ -131,7 +163,7 @@ namespace LibClient
                 }
             }
             //DEBUG
-            System.Console.WriteLine(JsonSerializer.Serialize(result));
+            //System.Console.WriteLine(JsonSerializer.Serialize(result));
             clientSocket.Disconnect(false);        
             return result;
         }

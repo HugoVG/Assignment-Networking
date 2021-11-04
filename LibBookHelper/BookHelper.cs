@@ -29,7 +29,7 @@ namespace BookHelper
         public SequentialHelper()
         {
             //todo: implement the body. Add extra fields and methods to the class if needed
-            string settings = File.ReadAllText($"./ClientServerConfig.json");
+            string settings = File.ReadAllText($"../ClientServerConfig.json");
             setting = JsonSerializer.Deserialize<Setting>(settings);
         }
 
@@ -57,10 +57,10 @@ namespace BookHelper
                 byte[] buffer = new byte[maxBuffSize];
                 byte[] msg = new byte[maxBuffSize];
                 string data = null;
-                System.Console.WriteLine("Ready to accept");
+                //System.Console.WriteLine("Ready to accept");
                 int receivingBytes = Recsock.Receive(buffer);
                 data += Encoding.ASCII.GetString(buffer, 0, receivingBytes);
-                Console.WriteLine("Received: {0}", data);
+                //Console.WriteLine("Received: {0}", data);
                 if (data == "")
                 {
                     
@@ -83,14 +83,14 @@ namespace BookHelper
             string jsonText = File.ReadAllText(@"./Books.json");
             BookData[] books = JsonSerializer.Deserialize<BookData[]>(jsonText); // Je had de verkeerde JsonSerializer   
             Message newMessage = new Message();
-            System.Console.WriteLine(message.Content + " DEBUG BOOKHELPER 86.60"); 
+            //System.Console.WriteLine(message.Content + " DEBUG BOOKHELPER 86.60"); 
             
             try {
                 BookData ret = books.Single(x => x.Title == message.Content);
-                System.Console.WriteLine(ret.Title + " Debug");
+                //System.Console.WriteLine(ret.Title + " Debug");
                 newMessage.Type = MessageType.BookInquiryReply;
                 newMessage.Content = JsonSerializer.Serialize(ret);
-                System.Console.WriteLine(newMessage.Content);                
+                //System.Console.WriteLine(newMessage.Content);                
             }
             catch (System.InvalidOperationException) {
                     newMessage.Type = MessageType.NotFound;

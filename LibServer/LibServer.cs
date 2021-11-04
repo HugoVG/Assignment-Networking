@@ -35,7 +35,7 @@ namespace LibServer
         public SequentialServer()
         {
             //todo: implement the body. Add extra fields and methods to the class if it is needed
-            string settings = File.ReadAllText($"./ClientServerConfig.json");
+            string settings = File.ReadAllText($"../ClientServerConfig.json");
             setting = JsonSerializer.Deserialize<Setting>(settings);
         }
 
@@ -71,11 +71,12 @@ namespace LibServer
                 IPEndPoint BookserverEndPoint = new IPEndPoint(IPBookHelper, this.setting.BookHelperPortNumber);
                 client_book = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 client_book.Connect(BookserverEndPoint);
-                System.Console.WriteLine("Connected to BookHelper"); 
+                //System.Console.WriteLine("Connected to BookHelper"); 
             }
             catch (SocketException e)
             {
-                Console.WriteLine("SocketException: {0}", e);
+                e.ToString();
+                //System.Console.WriteLine("SocketException: {0}", e);
             }
             #endregion
             #region Socket_UserHelper
@@ -90,67 +91,74 @@ namespace LibServer
                 IPEndPoint UserserverEndPoint = new IPEndPoint(IPUserHelper, this.setting.UserHelperPortNumber);
                 client_User = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 client_User.Connect(UserserverEndPoint);
-                System.Console.WriteLine("Connected to userHelper"); 
+                //System.Console.WriteLine("Connected to userHelper"); 
             }
             catch (SocketException e)
             {
-                Console.WriteLine("SocketException: {0}", e);
+                e.ToString();
+                //System.Console.WriteLine("SocketException: {0}", e);
             }
             #endregion
             while (running)
             {
                 #region UNSAFE
-
 begin:    
                 #endregion
                 Recsock = sock.Accept();
-                System.Console.WriteLine(Recsock.Connected);                
+                //System.Console.WriteLine(Recsock.Connected);                
                 while (running_INNER)
                 {
                     #region connect
-                    System.Console.WriteLine("Ready to accept");
+                    //System.Console.WriteLine("Ready to accept");
                     int maxBuffSize = 1000;            
                     byte[] msg = new byte[maxBuffSize];
                     byte[] buffer = new byte[maxBuffSize];
                     int receivingBytes = Recsock.Receive(buffer);
                     string data = Encoding.ASCII.GetString(buffer, 0, receivingBytes);
-                    System.Console.WriteLine(data + " DEBUG 89");
-                    Console.WriteLine("Received: {0} 90", data);
+                    //System.Console.WriteLine(data + " DEBUG 89");
+                    //System.Console.WriteLine("Received: {0} 90", data);
                     #endregion
 
-                    System.Console.WriteLine(data + " DEBUG 119");
+                    //System.Console.WriteLine(data + " DEBUG 119");
                     if (data == "")
                      {
                         goto begin;
                     }
                     Message message = JsonSerializer.Deserialize<Message>(data);
-                    
-                    
                     switch (message.Type)
                     {
-                        case MessageType.Hello:
+                        case MessageType.EndCommunication:
                             {
-                                System.Console.WriteLine(message.Content);
-                                if (message.Content == "client--1"){
-                                    try{
-                                        client_User.Shutdown(SocketShutdown.Both);
-                                        System.Console.WriteLine("Client User Shutdown");
+                                try{
+                                    client_User.Shutdown(SocketShutdown.Both);
+                                    //System.Console.WriteLine("Client User Shutdown");
                                     }
                                     finally{
                                         client_User.Close();
-                                        System.Console.WriteLine("Client User Closed");
+                                        //System.Console.WriteLine("Client User Closed");
                                     }
                                     try{
                                         client_book.Shutdown(SocketShutdown.Both);
-                                        System.Console.WriteLine("Client Book Shutdown");
+                                        //System.Console.WriteLine("Client Book Shutdown");
                                     }
                                     finally{
                                         client_book.Close();
-                                        System.Console.WriteLine("Client Book Closed");                                        
+                                        //System.Console.WriteLine("Client Book Closed");                                        
+                                    }
+                                    try{
+                                        Recsock.Shutdown(SocketShutdown.Both);
+                                        //System.Console.WriteLine("Client Book Shutdown");
+                                    }
+                                    finally{
+                                        Recsock.Close();
+                                        //System.Console.WriteLine("Client Book Closed");                                        
                                     }
                                     running = false;
                                     running_INNER = false;
-                                }
+                                    break;
+                            }
+                        case MessageType.Hello:
+                            {
                                 message.Type = MessageType.Welcome;
                                 message.Content = "";
                                 string send = JsonSerializer.Serialize(message);
@@ -166,7 +174,7 @@ begin:
                                 int receivingBookBytes = client_book.Receive(buffer);
 
                                 string data_book = Encoding.ASCII.GetString(buffer, 0, receivingBookBytes);
-                                Console.WriteLine("Received: {0} 110", data_book);
+                                //System.Console.WriteLine("Received: {0} 110", data_book);
                                 Message message_book = JsonSerializer.Deserialize<Message>(data_book);
                                 if (message_book.Type == MessageType.BookInquiryReply){
                                     send = JsonSerializer.Serialize(message_book);
@@ -177,12 +185,7 @@ begin:
                                     //TODO: Close everything
                                     send = JsonSerializer.Serialize(message_book);
                                     sendBytes = Encoding.ASCII.GetBytes(send);
-                                    Recsock.Send(sendBytes);  
-                                    /*
-                                        4. The server forwards the NotFoundmessage to the client.
-                                        5. The client builds an object of Outputwith the name of the proper values that indicates the result of the request.6.Closing communications: After all clients requesting their books, there is a special client_id=-1 that has an empty book name. This client, afterreceiving the welcomemessage from the server, must send a message with type“EndCommunication” to the server. This message indicates that 
-                                        there will be no more communications and all the programs must close their communications. The server forwards the message to both helpers and closes its communications. Helpers must close their communications after receiving such a message from the server. This message has no content.  
-                                    */     
+                                    Recsock.Send(sendBytes);                                    
                                 }
                                 break;
                             }
@@ -199,7 +202,7 @@ begin:
                                 int receivingUserBytes = client_User.Receive(buffer);
 
                                 string data_user = Encoding.ASCII.GetString(buffer, 0, receivingUserBytes);
-                                Console.WriteLine("Received: {0} 110", data_user);
+                                //System.Console.WriteLine("Received: {0} 110", data_user);
                                 Message message_user = JsonSerializer.Deserialize<Message>(data_user);
                                 if (message_user.Type == MessageType.UserInquiryReply){
                                     send = JsonSerializer.Serialize(message_user);
@@ -209,8 +212,20 @@ begin:
                                 else if (message_user.Type == MessageType.NotFound){
                                 //TODO: Close everything
                                 }
+                                else if (message_user.Type == MessageType.Error){
+                                    //System.Console.WriteLine("THIS IS IN MESSAGETYPE ERROR 214");
+                                    sendBytes = Encoding.ASCII.GetBytes(JsonSerializer.Serialize(message));
+                                    Recsock.Send(sendBytes);
+                                } 
                                 break;
+                                
                             }
+                        case MessageType.Error:{
+                                //System.Console.WriteLine("THIS IS IN MESSAGETYPE ERROR 220");
+                                Byte[] sendBytes = Encoding.ASCII.GetBytes(JsonSerializer.Serialize(message));
+                                Recsock.Send(sendBytes); 
+                            break;
+                        }
 
                         default:
                             {

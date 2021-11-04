@@ -29,7 +29,7 @@ namespace UserHelper
         private Setting setting; // geen static zetten 
         public SequentialHelper()
         {
-            string settings = (File.ReadAllText("./ClientServerConfig.json"));
+            string settings = (File.ReadAllText("../ClientServerConfig.json"));
             this.setting = JsonSerializer.Deserialize<Setting>(settings);
 
         }
@@ -41,11 +41,7 @@ namespace UserHelper
             //My IP is in setting.ServerIPAddress
 
             #region  Yoinked from https://github.com/afshinamighi/Courses/blob/main/Networking/SimpleCS/Client/Program.cs the sample code who got from school
-            int maxBuffSize = 1000;
-
-            byte[] buffer = new byte[maxBuffSize];
-            byte[] msg = new byte[maxBuffSize];
-            string data = null;
+            
             #endregion
 
             IPAddress ipAddress = IPAddress.Parse(setting.UserHelperIPAddress);
@@ -62,15 +58,28 @@ namespace UserHelper
             try{
                 while (Recsock.Connected)
                 {
-                    System.Console.WriteLine("Ready to accept");
+                    //System.Console.WriteLine("Ready to accept");
+                    int maxBuffSize = 1000;
+                    byte[] buffer = new byte[maxBuffSize];
+                    byte[] msg = new byte[maxBuffSize];
+                    string data = null;
                     int receivingBytes = Recsock.Receive(buffer);
                     data += Encoding.ASCII.GetString(buffer, 0, receivingBytes);
-                    Console.WriteLine("Received: {0}", data);
-
+                    //System.Console.WriteLine("Received: {0}", data);
+                     if (data == "")
+                    {
+                        
+                    }
+                    try{
                     Message message = JsonSerializer.Deserialize<Message>(data);
                     Recsock.Send(Encoding.ASCII.GetBytes(JsonSerializer.Serialize(ExtractInfo(message))));
                     // Thanks for the one-line. i hate to admit it mr dit maakt mijn level zeer simpel 
-                    
+                    }
+                    catch(System.Text.Json.JsonException e)
+                    {
+                        e = new System.Text.Json.JsonException("Invalid JSON");
+                        break;                   
+                    } 
                     //TODO: Here something todo what data we got
                 }
             }
@@ -88,7 +97,7 @@ namespace UserHelper
             Message newMessage = new Message();
             newMessage.Type = MessageType.UserInquiryReply;
 
-            System.Console.WriteLine(message.Content + " DEBUGING USERHELPER...");
+            //System.Console.WriteLine(message.Content + " DEBUGING USERHELPER...");
             UserData user;
             try{
                  user = users.Single(x => x.User_id == message.Content);
@@ -96,15 +105,14 @@ namespace UserHelper
             catch (Exception e)
             {
                 e.ToString(); // no errors ;)
-                newMessage.Type = MessageType.NotFound;
+                newMessage.Type = MessageType.Error;
                 newMessage.Content = "User not found";
                 return newMessage;
             }
-            System.Console.WriteLine(user.Name + " Debug");
+            //System.Console.WriteLine(user.Name + " Debug");
             newMessage.Content = JsonSerializer.Serialize(user);
-            System.Console.WriteLine(newMessage.Content);                
-            return newMessage;
-
+            //System.Console.WriteLine(newMessage.Content);                
+            return newMessage;            
             // ik heb hier geen try catch gedaan want volgens de stappen heb je geen situatie waar er een boek/ user niet gevonden is
         }
     }

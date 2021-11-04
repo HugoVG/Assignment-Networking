@@ -5,7 +5,8 @@
     "ServerIPAddress": "127.0.0.1",
     "BookHelperIPAddress": "127.0.0.1",
     "UserHelperIPAddress": "127.0.0.1",
-    "ServerListeningQueue": 5
+    "ServerListeningQueue": 5,
+    "Hugo van Geijn" : 1014168,
+    "Hajar Akkouh" : 1008536
 }
-Hugo : 1014168
 

@@ -82,5 +82,19 @@
     "Status": "Available",
     "BorrowedBy": null,
     "ReturnDate": null
+  },
+  {
+    "Title": "TESTING CASE",
+    "Author": "Henk",
+    "Status": "Borrowed",
+    "BorrowedBy": "user-4",
+    "ReturnDate": "20-12-2021"
+  },
+  {
+    "Title": "TESTING CASE2",
+    "Author": "HOBBA",
+    "Status": "Borrowed",
+    "BorrowedBy": "user-420",
+    "ReturnDate": "30-12-2021"
   }
 ]
